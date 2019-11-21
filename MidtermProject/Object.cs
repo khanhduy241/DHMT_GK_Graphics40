@@ -5,18 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SharpGL;
+using System.Windows.Forms;
 
 namespace MidtermProject
 {
-  
+    // Lop hinh hoc
     class Shape
     {
+        // neu hinh la hinh deu thi IsEquilateral = true va nguoc lai
         public bool IsEquilateral = false;
 
+        // dem so dinh
+        public virtual int pointCount() { return 0; }
+
+        // cap nhat toa do dinh tiep theo cua da giac
+        public virtual void Update(Point p1)
+        { }
+
+        // cap nhat toa do dinh tu diem dau va diem cuoi
         public virtual void Update(Point p1, Point p2)
         { }
 
+        // ve hinh
         public virtual void Draw(OpenGL gl)
+        { }
+
+        // ve hinh theo tung doan doi voi da giac
+        public virtual void DrawByLine(OpenGL gl)
         { }
 
     }
@@ -25,6 +40,8 @@ namespace MidtermProject
     {
         private Point Vertex1;
         private Point Vertex2;
+
+        public override int pointCount() { return 2; }
 
         public override void Update(Point p1, Point p2) // start point, end point
         {
@@ -47,6 +64,7 @@ namespace MidtermProject
     {
         private Point Vertex1, Vertex2, Vertex3;
 
+        public override int pointCount() { return 3; }
         public override void Update(Point p1, Point p2) // start point, end point
         {
             if (this.IsEquilateral == true)
@@ -54,7 +72,7 @@ namespace MidtermProject
                 Vertex1.X = (p1.X + p2.X) / 2; // top vertex
                 Vertex1.Y = p1.Y;
 
-                double h = Math.Abs(p2.X - p1.X) * Math.Sqrt(3) / 2;
+                double h = Math.Abs(p2.X - p1.X) * Math.Sqrt(3) / 2; // lay duong cao bang canh day nhan can 3 chia 2
                 Vertex2.X = p1.X;
                 Vertex2.Y = p1.Y + (int)h;      // bottom vertex 
 
@@ -88,6 +106,7 @@ namespace MidtermProject
     {
         private Point Vertex1, Vertex2, Vertex3, Vertex4;
 
+        public override int pointCount() { return 4; }
         public override void Update(Point p1, Point p2) // start point, end point
         {
             if (this.IsEquilateral == true)
@@ -127,7 +146,8 @@ namespace MidtermProject
 
         public override void Update(Point p1, Point p2) // start point, end point
         {
-            if (Math.Abs(p1.X - p2.X) <= Math.Abs(p1.Y - p2.Y))
+            // neu khoang cach 2 diem theo phuong x be hon thi lay khoang cach do lam duong kinh, va nguoc lai
+            if (Math.Abs(p1.X - p2.X) <= Math.Abs(p1.Y - p2.Y)) 
                 r = (p2.X - p1.X) / 2;
             else
                 r = (p2.Y - p1.Y) / 2;
@@ -185,12 +205,14 @@ namespace MidtermProject
     {
         private Point Vertex1, Vertex2, Vertex3, Vertex4, Vertex5;
 
+        public override int pointCount() { return 5; }
         public override void Update(Point p1, Point p2) // start point, end point
         {
             double dx, dy;
             if (IsEquilateral == true)
             {
-                double r;
+                double r; // khoang cach tu tam toi dinh
+                // neu khoang cach 2 diem theo phuong x be hon thi lay khoang cach do lam 2r, va nguoc lai
                 if (Math.Abs(p1.X - p2.X) <= Math.Abs(p1.Y - p2.Y))
                     r = (p2.X - p1.X) / 2;
                 else
@@ -221,8 +243,8 @@ namespace MidtermProject
             }
             else
             {
-                dx = 19 * (p2.X - p1.X) / 98;
-                dy = 5 * (p2.Y - p1.Y) / 13;
+                dx = 19 * (p2.X - p1.X) / 98;  // ti le tu quy uoc
+                dy = 5 * (p2.Y - p1.Y) / 13;   // ti le tu quy uoc
 
                 Vertex1.X = (p1.X + p2.X) / 2;
                 Vertex1.Y = p1.Y;
@@ -261,11 +283,13 @@ namespace MidtermProject
         private int dx, dy;
         private Point Vertex1, Vertex2, Vertex3, Vertex4, Vertex5, Vertex6;
 
+        public override int pointCount() { return 6; }
         public override void Update(Point p1, Point p2) // start point, end point
         {
             if (IsEquilateral == true)
             {
                 double r;
+                // neu khoang cach 2 diem theo phuong x be hon thi lay khoang cach do lam 2r, va nguoc lai
                 if (Math.Abs(p1.X - p2.X) <= Math.Abs(p1.Y - p2.Y))
                     r = (p2.X - p1.X) / 2;
                 else
@@ -339,27 +363,42 @@ namespace MidtermProject
         }
     }
 
-    class Polygon 
+    class Polygon : Shape
     {
-        private List<Point> px = new List<Point>();
-        public void UpdatePoly(Point p1) 
-        {
-            px.Add(p1);
-        }
+        private List<Point> px = null;
 
-        public void DrawByLine(OpenGL gl)
+        public override int pointCount() { return px.Count(); }
+        public override void Update(Point p1) 
         {
-            if (px.Count() == 2) return;
-            for (int i = 1; i < px.Count(); i++)
+            if (px == null)
             {
-                Line l = new Line();
-                l.Update(px[i - 1], px[i]);
-                l.Draw(gl);
+                px = new List<Point>();
+                px.Add(p1);
+            }
+            else
+            {
+                if (px[px.Count - 1] != p1)
+                {
+                    px.Add(p1);
+                }
             }
         }
 
-        public void DrawPoly(OpenGL gl)
+        public override void DrawByLine(OpenGL gl)
         {
+            if (px.Count() > 1)
+                for (int i = 1; i < px.Count(); i++)
+                {
+                    Line l = new Line();
+                    l.Update(px[i - 1], px[i]);
+                    l.Draw(gl);
+                }
+        }
+
+        public override void Draw(OpenGL gl)
+        {
+            if (px == null) return;
+
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < px.Count(); i++)

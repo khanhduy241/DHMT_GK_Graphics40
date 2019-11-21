@@ -18,18 +18,29 @@ namespace MidtermProject
     {
         Color colorUserColor;
 
-        Polygon p = new Polygon();
+        // danh sanh cac hinh da ve
+        List<Shape> listShape = new List<Shape>();
+        Shape t = new Shape();
 
+        // draw = -1 : khong ve hinh
+        // draw = 0 : hoan tat ve (mouse up)
+        // draw = 1 : ve hinh (mouse down)
+        int draw = -1;
+
+        // pick = -1 : khong ve hinh
+        // pick = 0 : hoan tat ve (right click)
+        // pick = 1 : chon diem tiep theo cua da giac (left click)
+        int pick = -1;
         int shape = 0;
-        public Point pStart { get; set; }
+        public Point pStart { get; set; } // diem dau (mouse down)
 
-        public Point pEnd { get; set; }
+        public Point pEnd { get; set; } // diem cuoi (mouse up)
 
-        public Point pTemp { get; set; }
+        public Point pTemp { get; set; } // diem hien thoi cua con tro chuot
 
-        public Point pclick { get; set; }
+        public Point pclick { get; set; } // diem left click
 
-        public Point prclick { get; set; }
+        public Point prclick { get; set; } // diem right click
 
         public Form1()
         {
@@ -73,7 +84,6 @@ namespace MidtermProject
             gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
 
             /* Vẽ vời chỗ này*/
-            Shape t = new Shape();
 
             if (shape == 0) {
                 gl.Begin(OpenGL.GL_POINTS);
@@ -96,55 +106,82 @@ namespace MidtermProject
             if (shape == 7)
                 t = new Hexagon();
             if (shape == 8)
-            {
-                if (prclick.IsEmpty == true && pclick.IsEmpty == false)
+                if (pick == -1)
                 {
-                    Line pEdge = new Line();
-                    DrawShape(gl, pEdge);
-                    p.UpdatePoly(pclick);
-                    p.DrawByLine(gl);
+                    t = new Polygon();
                 }
-                else
-                    p.DrawPoly(gl);
-            }
 
-            if (shape != 0 && shape != 8)
-            {
-                if (cb_equilateral.Checked)
-                    t.IsEquilateral = true;
-                else
-                    t.IsEquilateral = false;
+            // kiem tra xem phai ve hinh deu hay khong
+            if (cb_equilateral.Checked)
+                t.IsEquilateral = true;
+            else
+                t.IsEquilateral = false;
 
-                DrawShape(gl, t);
-            }
-
+            DrawShape(gl, t);
         }
-        
+
+        // ve tat ca hinh trong list
+        private void drawAll(OpenGL gl)
+        {
+            foreach(Shape s in listShape)
+            {
+                s.Draw(gl);
+            }
+        }
+
+        // ve hinh, input bien control, hinh can ve
         private void DrawShape(OpenGL gl, Shape t)
         {
-            if (pStart.IsEmpty == false && pEnd == pStart)
+            if (shape == 8)
             {
-                t.Update(pStart, pTemp);
-                t.Draw(gl);
+                if (pick == 1)
+                {
+                    t.Update(pclick);
+                    t.DrawByLine(gl);
+                }
+                if (pick == 0)
+                {
+                    t.Draw(gl);
+                    listShape.Add(t);
+                    pick = -1;
+                }
             }
-            t.Update(pStart, pEnd);
-            t.Draw(gl);
+            else
+            {
+                if (draw == 1)
+                {
+                    t.Update(pStart, pTemp);
+                    t.Draw(gl);
+                }
+                else if (draw == 0)
+                {
+                    t.Update(pStart, pEnd);
+                    t.Draw(gl);
+                    listShape.Add(t);
+                }
+            }
+            drawAll(gl);
         }
 
         private void openGLControl_MouseDown(object sender, MouseEventArgs e)
         {
             pStart = e.Location;
             pEnd = pStart;
+            draw = 1;
         }
 
         private void openGLControl_MouseUp(object sender, MouseEventArgs e)
         {
+            draw = 0;
             pEnd = e.Location;
         }
 
         private void openGLControl_MouseMove(object sender, MouseEventArgs e)
         {
-            pTemp = e.Location;
+            if (draw == 1)
+            {
+                pTemp = e.Location;
+            }
         }
 
         private void openGLControl_MouseClick(object sender, MouseEventArgs e)
@@ -154,51 +191,62 @@ namespace MidtermProject
 
                 case MouseButtons.Left:
                     pclick = e.Location;  // left click
+                    pick = 1;
                     break;
 
                 case MouseButtons.Right:
                     prclick = e.Location;   // Right click
+                    pick = 0;
                     break;
             }
         }
         private void bt_line_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 1;
+            draw = -1;
         }
 
         private void bt_triangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 2;
+            draw = -1;
         }
 
         private void bt_circle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 3;
+            draw = -1;
         }
 
         private void bt_ellipse_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 4;
+            draw = -1;
         }
 
         private void bt_rectangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 5;
+            draw = -1;
         }
 
         private void bt_pentagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 6;
+            draw = -1;
         }
 
         private void bt_hexagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 7;
+            draw = -1;
         }
 
         private void bt_polygon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 8;
+            pick = -1;
         }
+
     }
 }
