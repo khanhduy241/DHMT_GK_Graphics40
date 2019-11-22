@@ -20,7 +20,9 @@ namespace MidtermProject
 
         // danh sanh cac hinh da ve
         List<Shape> listShape = new List<Shape>();
+        List<Fill> listFill = new List<Fill>();
         Shape t = new Shape();
+        Fill f = new Fill();
 
         // draw = -1 : khong ve hinh
         // draw = 0 : hoan tat ve (mouse up)
@@ -32,6 +34,13 @@ namespace MidtermProject
         // pick = 1 : chon diem tiep theo cua da giac (left click)
         int pick = -1;
         int shape = 0;
+
+        /*Kiểu tô
+            1: Tô loang
+            2: Tô scanline
+         */
+        int fillType = 0;
+        int filled = 0;
         public Point pStart { get; set; } // diem dau (mouse down)
 
         public Point pEnd { get; set; } // diem cuoi (mouse up)
@@ -41,6 +50,9 @@ namespace MidtermProject
         public Point pclick { get; set; } // diem left click
 
         public Point prclick { get; set; } // diem right click
+
+        public Point pFill { get; set; }
+
 
         public Form1()
         {
@@ -82,7 +94,7 @@ namespace MidtermProject
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
           
             gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
-
+            gl.LineWidth(2.0f);
             /* Vẽ vời chỗ này*/
 
             if (shape == 0) {
@@ -94,7 +106,10 @@ namespace MidtermProject
             if (shape == 1)
                 t = new Line();
             if (shape == 2)
+            {
                 t = new Triangle();
+                
+            }
             if (shape == 3)
                 t = new Circle();
             if (shape == 4)
@@ -116,8 +131,15 @@ namespace MidtermProject
                 t.IsEquilateral = true;
             else
                 t.IsEquilateral = false;
-
+          
             DrawShape(gl, t);
+            if (fillType == 1 && !pFill.IsEmpty)
+            {
+                f = new FloodFill();
+                f.ApplyFill(gl, pFill, colorUserColor);              
+            }
+
+
         }
 
         // ve tat ca hinh trong list
@@ -132,6 +154,7 @@ namespace MidtermProject
         // ve hinh, input bien control, hinh can ve
         private void DrawShape(OpenGL gl, Shape t)
         {
+            
             if (shape == 8)
             {
                 if (pick == 1)
@@ -142,7 +165,7 @@ namespace MidtermProject
                 if (pick == 0)
                 {
                     t.Draw(gl);
-                    listShape.Add(t);
+                    listShape.Add(t);              
                     pick = -1;
                 }
             }
@@ -158,9 +181,13 @@ namespace MidtermProject
                     t.Update(pStart, pEnd);
                     t.Draw(gl);
                     listShape.Add(t);
+                   
                 }
             }
+            
             drawAll(gl);
+         
+            
         }
 
         private void openGLControl_MouseDown(object sender, MouseEventArgs e)
@@ -168,12 +195,17 @@ namespace MidtermProject
             pStart = e.Location;
             pEnd = pStart;
             draw = 1;
+            if (fillType == 1)
+            {
+                pFill = e.Location;
+            }
         }
 
         private void openGLControl_MouseUp(object sender, MouseEventArgs e)
         {
             draw = 0;
             pEnd = e.Location;
+            
         }
 
         private void openGLControl_MouseMove(object sender, MouseEventArgs e)
@@ -181,7 +213,9 @@ namespace MidtermProject
             if (draw == 1)
             {
                 pTemp = e.Location;
+               
             }
+                             
         }
 
         private void openGLControl_MouseClick(object sender, MouseEventArgs e)
@@ -248,5 +282,15 @@ namespace MidtermProject
             pick = -1;
         }
 
+        private void bt_Color_MouseClick(object sender, EventArgs e)
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+                colorUserColor = colorDialog1.Color;
+        }
+
+        private void bt_FloodFill_MouseClick(object sender, EventArgs e)
+        {
+            fillType = 1;
+        }
     }
 }

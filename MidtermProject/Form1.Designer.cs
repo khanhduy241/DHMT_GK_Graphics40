@@ -38,6 +38,9 @@
             this.bt_hexagon = new System.Windows.Forms.Button();
             this.cb_equilateral = new System.Windows.Forms.CheckBox();
             this.bt_polygon = new System.Windows.Forms.Button();
+            this.bt_Color = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.bt_FloodFill = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,13 +49,13 @@
             this.openGLControl.BackColor = System.Drawing.SystemColors.Control;
             this.openGLControl.DrawFPS = false;
             this.openGLControl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.openGLControl.Location = new System.Drawing.Point(72, 50);
-            this.openGLControl.Margin = new System.Windows.Forms.Padding(5);
+            this.openGLControl.Location = new System.Drawing.Point(54, 41);
+            this.openGLControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.openGLControl.Name = "openGLControl";
             this.openGLControl.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL2_1;
             this.openGLControl.RenderContextType = SharpGL.RenderContextType.DIBSection;
             this.openGLControl.RenderTrigger = SharpGL.RenderTrigger.TimerBased;
-            this.openGLControl.Size = new System.Drawing.Size(979, 476);
+            this.openGLControl.Size = new System.Drawing.Size(734, 387);
             this.openGLControl.TabIndex = 1;
             this.openGLControl.OpenGLInitialized += new System.EventHandler(this.openGLControl_OpenGLInitialized_1);
             this.openGLControl.OpenGLDraw += new SharpGL.RenderEventHandler(this.openGLControl_OpenGLDraw_1);
@@ -64,9 +67,10 @@
             // 
             // bt_line
             // 
-            this.bt_line.Location = new System.Drawing.Point(12, 12);
+            this.bt_line.Location = new System.Drawing.Point(9, 10);
+            this.bt_line.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_line.Name = "bt_line";
-            this.bt_line.Size = new System.Drawing.Size(75, 30);
+            this.bt_line.Size = new System.Drawing.Size(56, 24);
             this.bt_line.TabIndex = 2;
             this.bt_line.Text = "Line";
             this.bt_line.UseVisualStyleBackColor = true;
@@ -74,9 +78,10 @@
             // 
             // bt_triangle
             // 
-            this.bt_triangle.Location = new System.Drawing.Point(94, 11);
+            this.bt_triangle.Location = new System.Drawing.Point(70, 9);
+            this.bt_triangle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_triangle.Name = "bt_triangle";
-            this.bt_triangle.Size = new System.Drawing.Size(75, 31);
+            this.bt_triangle.Size = new System.Drawing.Size(56, 25);
             this.bt_triangle.TabIndex = 3;
             this.bt_triangle.Text = "Tri";
             this.bt_triangle.UseVisualStyleBackColor = true;
@@ -84,9 +89,10 @@
             // 
             // bt_circle
             // 
-            this.bt_circle.Location = new System.Drawing.Point(176, 12);
+            this.bt_circle.Location = new System.Drawing.Point(132, 10);
+            this.bt_circle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_circle.Name = "bt_circle";
-            this.bt_circle.Size = new System.Drawing.Size(75, 30);
+            this.bt_circle.Size = new System.Drawing.Size(56, 24);
             this.bt_circle.TabIndex = 4;
             this.bt_circle.Text = "Circle";
             this.bt_circle.UseVisualStyleBackColor = true;
@@ -94,9 +100,10 @@
             // 
             // bt_ellipse
             // 
-            this.bt_ellipse.Location = new System.Drawing.Point(258, 11);
+            this.bt_ellipse.Location = new System.Drawing.Point(194, 9);
+            this.bt_ellipse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_ellipse.Name = "bt_ellipse";
-            this.bt_ellipse.Size = new System.Drawing.Size(75, 31);
+            this.bt_ellipse.Size = new System.Drawing.Size(56, 25);
             this.bt_ellipse.TabIndex = 5;
             this.bt_ellipse.Text = "Ellipse";
             this.bt_ellipse.UseVisualStyleBackColor = true;
@@ -104,9 +111,10 @@
             // 
             // bt_rectangle
             // 
-            this.bt_rectangle.Location = new System.Drawing.Point(340, 11);
+            this.bt_rectangle.Location = new System.Drawing.Point(255, 9);
+            this.bt_rectangle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_rectangle.Name = "bt_rectangle";
-            this.bt_rectangle.Size = new System.Drawing.Size(75, 31);
+            this.bt_rectangle.Size = new System.Drawing.Size(56, 25);
             this.bt_rectangle.TabIndex = 6;
             this.bt_rectangle.Text = "Rec";
             this.bt_rectangle.UseVisualStyleBackColor = true;
@@ -114,9 +122,10 @@
             // 
             // bt_pentagon
             // 
-            this.bt_pentagon.Location = new System.Drawing.Point(422, 11);
+            this.bt_pentagon.Location = new System.Drawing.Point(316, 9);
+            this.bt_pentagon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_pentagon.Name = "bt_pentagon";
-            this.bt_pentagon.Size = new System.Drawing.Size(75, 31);
+            this.bt_pentagon.Size = new System.Drawing.Size(56, 25);
             this.bt_pentagon.TabIndex = 7;
             this.bt_pentagon.Text = "Pen";
             this.bt_pentagon.UseVisualStyleBackColor = true;
@@ -124,9 +133,10 @@
             // 
             // bt_hexagon
             // 
-            this.bt_hexagon.Location = new System.Drawing.Point(504, 11);
+            this.bt_hexagon.Location = new System.Drawing.Point(378, 9);
+            this.bt_hexagon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_hexagon.Name = "bt_hexagon";
-            this.bt_hexagon.Size = new System.Drawing.Size(75, 31);
+            this.bt_hexagon.Size = new System.Drawing.Size(56, 25);
             this.bt_hexagon.TabIndex = 8;
             this.bt_hexagon.Text = "Hex";
             this.bt_hexagon.UseVisualStyleBackColor = true;
@@ -135,29 +145,53 @@
             // cb_equilateral
             // 
             this.cb_equilateral.AutoSize = true;
-            this.cb_equilateral.Location = new System.Drawing.Point(807, 12);
+            this.cb_equilateral.Location = new System.Drawing.Point(605, 10);
+            this.cb_equilateral.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb_equilateral.Name = "cb_equilateral";
-            this.cb_equilateral.Size = new System.Drawing.Size(97, 21);
+            this.cb_equilateral.Size = new System.Drawing.Size(75, 17);
             this.cb_equilateral.TabIndex = 9;
             this.cb_equilateral.Text = "Equilateral";
             this.cb_equilateral.UseVisualStyleBackColor = true;
             // 
             // bt_polygon
             // 
-            this.bt_polygon.Location = new System.Drawing.Point(586, 11);
+            this.bt_polygon.Location = new System.Drawing.Point(440, 9);
+            this.bt_polygon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bt_polygon.Name = "bt_polygon";
-            this.bt_polygon.Size = new System.Drawing.Size(75, 31);
+            this.bt_polygon.Size = new System.Drawing.Size(56, 25);
             this.bt_polygon.TabIndex = 10;
             this.bt_polygon.Text = "Poly";
             this.bt_polygon.UseVisualStyleBackColor = true;
             this.bt_polygon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.bt_polygon_MouseClick);
             // 
+            // bt_Color
+            // 
+            this.bt_Color.Location = new System.Drawing.Point(713, 6);
+            this.bt_Color.Name = "bt_Color";
+            this.bt_Color.Size = new System.Drawing.Size(75, 23);
+            this.bt_Color.TabIndex = 11;
+            this.bt_Color.Text = "Color";
+            this.bt_Color.UseVisualStyleBackColor = true;
+            this.bt_Color.Click += new System.EventHandler(this.bt_Color_MouseClick);
+            // 
+            // bt_FloodFill
+            // 
+            this.bt_FloodFill.Location = new System.Drawing.Point(513, 12);
+            this.bt_FloodFill.Name = "bt_FloodFill";
+            this.bt_FloodFill.Size = new System.Drawing.Size(75, 23);
+            this.bt_FloodFill.TabIndex = 12;
+            this.bt_FloodFill.Text = "Flood Fill";
+            this.bt_FloodFill.UseVisualStyleBackColor = true;
+            this.bt_FloodFill.Click += new System.EventHandler(this.bt_FloodFill_MouseClick);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.bt_FloodFill);
+            this.Controls.Add(this.bt_Color);
             this.Controls.Add(this.bt_polygon);
             this.Controls.Add(this.cb_equilateral);
             this.Controls.Add(this.bt_hexagon);
@@ -168,7 +202,6 @@
             this.Controls.Add(this.bt_triangle);
             this.Controls.Add(this.bt_line);
             this.Controls.Add(this.openGLControl);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl)).EndInit();
@@ -188,6 +221,9 @@
         private System.Windows.Forms.Button bt_hexagon;
         private System.Windows.Forms.CheckBox cb_equilateral;
         private System.Windows.Forms.Button bt_polygon;
+        private System.Windows.Forms.Button bt_Color;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Button bt_FloodFill;
     }
 }
 

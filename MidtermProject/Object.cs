@@ -57,6 +57,7 @@ namespace MidtermProject
            
             gl.End();
             gl.Flush();
+
         }
     }
 
@@ -411,5 +412,81 @@ namespace MidtermProject
     }
 }
 
+class Fill
+{
+    public virtual void FillColor(OpenGL gl, Point p, Color oldColor, Color newColor) { }
+    public virtual void ApplyFill(OpenGL gl, Point p, Color newColor) { }
+    public void putPixel(OpenGL gl, Point p, Color color)
+    {
+        //Lấy từng thành phần màu
+        gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0, color.A);
+        gl.PointSize(2.0f);//Size điểm
+        gl.Begin(OpenGL.GL_POINTS);
+        gl.Vertex(p.X, gl.RenderContextProvider.Height - p.Y);
+        gl.End();
+        gl.Flush();
 
+    }
+    public void getPixel(OpenGL gl, Point p, out Byte[] color)
+    {
+        color = new Byte[4 * 1 * 1]; // Components * width * height (RGBA)
+        gl.ReadPixels(p.X, gl.RenderContextProvider.Height - p.Y, 1, 1, OpenGL.GL_RGBA, OpenGL.GL_UNSIGNED_BYTE, color);
+    }
 
+   
+}
+
+class FloodFill:Fill
+{
+    public override void ApplyFill(OpenGL gl, Point pFill, Color newColor)
+    {
+
+        Byte[] pixel = new Byte[4];
+        //Lấy điểm hạt giống
+        getPixel(gl, pFill, out pixel);
+        Color oldColor = new Color();
+        oldColor = Color.FromArgb(pixel[3], pixel[0], pixel[1], pixel[2]);
+        //Tô loang
+        FillColor(gl, pFill, oldColor, newColor);
+    }
+    public override void FillColor(OpenGL gl, Point center, Color oldColor, Color newColor)
+    {
+        //Tránh lặp vô hạn khi màu cũ giống màu mới
+        if (newColor == oldColor) return;
+
+        //Mảng index để truy cập các lân cận 4
+        int[] dx = new int[] { 0, 2, 0, -2 };
+        int[] dy = new int[] { -2, 0, 2, 0 };
+
+        //Tạo stack và push điểm khởi đầu vào stack
+        Stack<Point> s = new Stack<Point>();
+        s.Push(center);
+
+        //Lặp đến khi stack rỗng
+        while (s.Count != 0)
+        {
+            //Lấy điểm từ stack
+            Point p = s.Pop();
+            //Tô màu cho điểm đó
+            putPixel(gl, p, newColor);
+            //Truy xuất lân cận 4 của điểm hiện hành
+            for (int i = 0; i < 4; i++)
+            {
+                //Lấy điểm lân cận
+                Point pNeighbor = new Point(p.X + dx[i], p.Y + dy[i]);
+
+                //Lấy giá trị pixel của điểm đó
+                Byte[] neighbor_color;
+                getPixel(gl, pNeighbor, out neighbor_color);
+
+                //Nếu điểm đó chưa tô thì thêm vào stack
+                if (neighbor_color[0] == oldColor.R && neighbor_color[1] == oldColor.G && neighbor_color[2] == oldColor.B
+                    && neighbor_color[3] == oldColor.A)
+                {
+                    s.Push(pNeighbor);
+                }
+            }
+
+        }
+    }
+}
