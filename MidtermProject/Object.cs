@@ -104,15 +104,15 @@ namespace MidtermProject
             gl.End();
             gl.Flush();           
         }
-        public override void FillColor(OpenGL gl, Color color, int type)
-        {
-            pCenter = new Point((Vertex1.X + Vertex2.X + Vertex3.X) / 3, (Vertex1.Y + Vertex2.Y + Vertex3.Y) / 3);
-            if (type == 1)
-            {              
-                Fill f = new FloodFill();
-                f.ApplyFill(gl, pCenter, color);
-            }
-        }
+        //public override void FillColor(OpenGL gl, Color color, int type)
+        //{
+        //    pCenter = new Point((Vertex1.X + Vertex2.X + Vertex3.X) / 3, (Vertex1.Y + Vertex2.Y + Vertex3.Y) / 3);
+        //    if (type == 1)
+        //    {              
+        //        Fill f = new FloodFill();
+        //        f.ApplyFill(gl, pCenter, color);
+        //    }
+        //}
     }
 
     class Rectangle : Shape
