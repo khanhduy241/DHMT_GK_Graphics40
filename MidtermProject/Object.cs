@@ -34,6 +34,9 @@ namespace MidtermProject
         public virtual void DrawByLine(OpenGL gl)
         { }
 
+        public virtual void FillColor(OpenGL gl, Color color, int type)
+        { }
+
     }
 
     class Line : Shape
@@ -63,7 +66,7 @@ namespace MidtermProject
 
     class Triangle : Shape
     {
-        private Point Vertex1, Vertex2, Vertex3;
+        private Point Vertex1, Vertex2, Vertex3, pCenter;
 
         public override int pointCount() { return 3; }
         public override void Update(Point p1, Point p2) // start point, end point
@@ -99,7 +102,16 @@ namespace MidtermProject
             gl.Vertex(Vertex3.X, gl.RenderContextProvider.Height - Vertex3.Y);
 
             gl.End();
-            gl.Flush();
+            gl.Flush();           
+        }
+        public override void FillColor(OpenGL gl, Color color, int type)
+        {
+            pCenter = new Point((Vertex1.X + Vertex2.X + Vertex3.X) / 3, (Vertex1.Y + Vertex2.Y + Vertex3.Y) / 3);
+            if (type == 1)
+            {              
+                Fill f = new FloodFill();
+                f.ApplyFill(gl, pCenter, color);
+            }
         }
     }
 

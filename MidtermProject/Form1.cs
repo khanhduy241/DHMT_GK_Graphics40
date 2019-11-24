@@ -40,7 +40,7 @@ namespace MidtermProject
             2: Tô scanline
          */
         int fillType = 0;
-        int filled = 0;
+        int fill = 0;
         public Point pStart { get; set; } // diem dau (mouse down)
 
         public Point pEnd { get; set; } // diem cuoi (mouse up)
@@ -95,7 +95,6 @@ namespace MidtermProject
           
             gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
             gl.LineWidth(2.0f);
-            /* Vẽ vời chỗ này*/
 
             if (shape == 0) {
                 gl.Begin(OpenGL.GL_POINTS);
@@ -106,10 +105,7 @@ namespace MidtermProject
             if (shape == 1)
                 t = new Line();
             if (shape == 2)
-            {
-                t = new Triangle();
-                
-            }
+                t = new Triangle();           
             if (shape == 3)
                 t = new Circle();
             if (shape == 4)
@@ -133,10 +129,12 @@ namespace MidtermProject
                 t.IsEquilateral = false;
           
             DrawShape(gl, t);
+
+            //Tô loang
             if (fillType == 1 && !pFill.IsEmpty)
             {
                 f = new FloodFill();
-                f.ApplyFill(gl, pFill, colorUserColor);              
+                f.ApplyFill(gl, pFill, colorUserColor);
             }
 
 
@@ -148,6 +146,8 @@ namespace MidtermProject
             foreach(Shape s in listShape)
             {
                 s.Draw(gl);
+                //if (fillType == 1  && !pFill.IsEmpty)
+                //    s.FillColor(gl, colorUserColor, 1);
             }
         }
 
@@ -195,7 +195,7 @@ namespace MidtermProject
             pStart = e.Location;
             pEnd = pStart;
             draw = 1;
-            if (fillType == 1)
+            if (fill == 1)
             {
                 pFill = e.Location;
             }
@@ -238,48 +238,56 @@ namespace MidtermProject
         {
             shape = 1;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_triangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 2;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_circle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 3;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_ellipse_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 4;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_rectangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 5;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_pentagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 6;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_hexagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 7;
             draw = -1;
+            fill = 0;
         }
 
         private void bt_polygon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 8;
             pick = -1;
+            fill = 0;
         }
 
         private void bt_Color_MouseClick(object sender, EventArgs e)
@@ -290,6 +298,7 @@ namespace MidtermProject
 
         private void bt_FloodFill_MouseClick(object sender, EventArgs e)
         {
+            fill = 1;
             fillType = 1;
         }
     }
