@@ -41,6 +41,7 @@
             this.bt_Color = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.bt_FloodFill = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,8 +50,8 @@
             this.openGLControl.BackColor = System.Drawing.SystemColors.Control;
             this.openGLControl.DrawFPS = false;
             this.openGLControl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.openGLControl.Location = new System.Drawing.Point(54, 41);
-            this.openGLControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.openGLControl.Location = new System.Drawing.Point(41, 64);
+            this.openGLControl.Margin = new System.Windows.Forms.Padding(4);
             this.openGLControl.Name = "openGLControl";
             this.openGLControl.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL2_1;
             this.openGLControl.RenderContextType = SharpGL.RenderContextType.DIBSection;
@@ -68,7 +69,7 @@
             // bt_line
             // 
             this.bt_line.Location = new System.Drawing.Point(9, 10);
-            this.bt_line.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_line.Margin = new System.Windows.Forms.Padding(2);
             this.bt_line.Name = "bt_line";
             this.bt_line.Size = new System.Drawing.Size(56, 24);
             this.bt_line.TabIndex = 2;
@@ -79,7 +80,7 @@
             // bt_triangle
             // 
             this.bt_triangle.Location = new System.Drawing.Point(70, 9);
-            this.bt_triangle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_triangle.Margin = new System.Windows.Forms.Padding(2);
             this.bt_triangle.Name = "bt_triangle";
             this.bt_triangle.Size = new System.Drawing.Size(56, 25);
             this.bt_triangle.TabIndex = 3;
@@ -90,7 +91,7 @@
             // bt_circle
             // 
             this.bt_circle.Location = new System.Drawing.Point(132, 10);
-            this.bt_circle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_circle.Margin = new System.Windows.Forms.Padding(2);
             this.bt_circle.Name = "bt_circle";
             this.bt_circle.Size = new System.Drawing.Size(56, 24);
             this.bt_circle.TabIndex = 4;
@@ -101,7 +102,7 @@
             // bt_ellipse
             // 
             this.bt_ellipse.Location = new System.Drawing.Point(194, 9);
-            this.bt_ellipse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_ellipse.Margin = new System.Windows.Forms.Padding(2);
             this.bt_ellipse.Name = "bt_ellipse";
             this.bt_ellipse.Size = new System.Drawing.Size(56, 25);
             this.bt_ellipse.TabIndex = 5;
@@ -112,7 +113,7 @@
             // bt_rectangle
             // 
             this.bt_rectangle.Location = new System.Drawing.Point(255, 9);
-            this.bt_rectangle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_rectangle.Margin = new System.Windows.Forms.Padding(2);
             this.bt_rectangle.Name = "bt_rectangle";
             this.bt_rectangle.Size = new System.Drawing.Size(56, 25);
             this.bt_rectangle.TabIndex = 6;
@@ -123,7 +124,7 @@
             // bt_pentagon
             // 
             this.bt_pentagon.Location = new System.Drawing.Point(316, 9);
-            this.bt_pentagon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_pentagon.Margin = new System.Windows.Forms.Padding(2);
             this.bt_pentagon.Name = "bt_pentagon";
             this.bt_pentagon.Size = new System.Drawing.Size(56, 25);
             this.bt_pentagon.TabIndex = 7;
@@ -134,7 +135,7 @@
             // bt_hexagon
             // 
             this.bt_hexagon.Location = new System.Drawing.Point(378, 9);
-            this.bt_hexagon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_hexagon.Margin = new System.Windows.Forms.Padding(2);
             this.bt_hexagon.Name = "bt_hexagon";
             this.bt_hexagon.Size = new System.Drawing.Size(56, 25);
             this.bt_hexagon.TabIndex = 8;
@@ -146,7 +147,7 @@
             // 
             this.cb_equilateral.AutoSize = true;
             this.cb_equilateral.Location = new System.Drawing.Point(605, 10);
-            this.cb_equilateral.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cb_equilateral.Margin = new System.Windows.Forms.Padding(2);
             this.cb_equilateral.Name = "cb_equilateral";
             this.cb_equilateral.Size = new System.Drawing.Size(75, 17);
             this.cb_equilateral.TabIndex = 9;
@@ -156,7 +157,7 @@
             // bt_polygon
             // 
             this.bt_polygon.Location = new System.Drawing.Point(440, 9);
-            this.bt_polygon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bt_polygon.Margin = new System.Windows.Forms.Padding(2);
             this.bt_polygon.Name = "bt_polygon";
             this.bt_polygon.Size = new System.Drawing.Size(56, 25);
             this.bt_polygon.TabIndex = 10;
@@ -184,12 +185,23 @@
             this.bt_FloodFill.UseVisualStyleBackColor = true;
             this.bt_FloodFill.Click += new System.EventHandler(this.bt_FloodFill_MouseClick);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(667, 36);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 13;
+            this.comboBox1.Text = "Line Width";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.bt_FloodFill);
             this.Controls.Add(this.bt_Color);
             this.Controls.Add(this.bt_polygon);
@@ -224,6 +236,7 @@
         private System.Windows.Forms.Button bt_Color;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button bt_FloodFill;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

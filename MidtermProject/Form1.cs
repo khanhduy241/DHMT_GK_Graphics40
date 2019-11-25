@@ -40,7 +40,10 @@ namespace MidtermProject
             2: Tô scanline
          */
         int fillType = 0;
-        int fill = 0;
+        int fillClick = 0;
+
+        //Line Width
+        float size = 1.0f;
         public Point pStart { get; set; } // diem dau (mouse down)
 
         public Point pEnd { get; set; } // diem cuoi (mouse up)
@@ -58,6 +61,16 @@ namespace MidtermProject
         {
             InitializeComponent();
             colorUserColor = Color.White;
+            comboBox1.Items.Add("1.5");
+            comboBox1.Items.Add("2.0");
+            comboBox1.Items.Add("2.5");
+            comboBox1.Items.Add("3.0");
+            comboBox1.Items.Add("3.5");
+            comboBox1.Items.Add("4.0");
+            comboBox1.Items.Add("4.5");
+            comboBox1.Items.Add("5.0");
+            comboBox1.Items.Add("5.5");
+            comboBox1.Items.Add("6.0");
         }
 
         private void openGLControl_OpenGLInitialized_1(object sender, EventArgs e)
@@ -94,7 +107,7 @@ namespace MidtermProject
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
           
            // gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
-            gl.LineWidth(2.0f);
+            gl.LineWidth(size);
 
             if (shape == 0) {
                 gl.Begin(OpenGL.GL_POINTS);
@@ -128,10 +141,25 @@ namespace MidtermProject
             else
                 t.IsEquilateral = false;
 
-            t.color = colorUserColor;
+            //Kiểm tra xem có tô màu không
+
+
+            //  t.color = colorUserColor;
+          
             DrawShape(gl, t);
-            t.color = colorUserColor;
+
+            if (fillClick == 1 && !pFill.IsEmpty)
+
+            {
+                t.fill = true;
+                t.pSeed = pFill;
+            }
+
             //Tô loang
+            if (t.fill == true)
+            {
+                t.FillColor(gl, 1);
+            }
 
 
 
@@ -140,25 +168,20 @@ namespace MidtermProject
         // ve tat ca hinh trong list
         private void drawAll(OpenGL gl)
         {
-            foreach(Shape s in listShape)
+            foreach (Shape s in listShape)
             {
-              
                 s.Draw(gl);
+                //if (s.fill == true)
+                //    s.FillColor(gl, 1);
                
-            }
-
-            if (fillType == 1 && !pFill.IsEmpty)
-            {
-                f = new FloodFill();
-                f.newColor = colorUserColor;
-                f.ApplyFill(gl, pFill);
             }
         }
 
         // ve hinh, input bien control, hinh can ve
         private void DrawShape(OpenGL gl, Shape t)
         {
-            
+            t.color = colorUserColor;
+
             if (shape == 8)
             {
                 if (pick == 1)
@@ -183,14 +206,17 @@ namespace MidtermProject
                 else if (draw == 0)
                 {
                     t.Update(pStart, pEnd);
-                    t.Draw(gl);
+                    t.Draw(gl);           
+                    //if(fillClick==1&&!pFill.IsEmpty)
+                    //{
+                    //    t.fill = true;
+                    //    t.pSeed = pFill;
+                    //}
                     listShape.Add(t);
-                   
+                
                 }
-            }
-            
-            drawAll(gl);
-           
+            }           
+            drawAll(gl);           
         }
 
         private void openGLControl_MouseDown(object sender, MouseEventArgs e)
@@ -198,7 +224,7 @@ namespace MidtermProject
             pStart = e.Location;
             pEnd = pStart;
             draw = 1;
-            if (fill == 1)
+            if (fillClick == 1)
             {
                 pFill = e.Location;
             }
@@ -241,56 +267,56 @@ namespace MidtermProject
         {
             shape = 1;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_triangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 2;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_circle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 3;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_ellipse_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 4;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_rectangle_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 5;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_pentagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 6;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_hexagon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 7;
             draw = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_polygon_MouseClick(object sender, MouseEventArgs e)
         {
             shape = 8;
             pick = -1;
-            fill = 0;
+            fillClick = 0;
         }
 
         private void bt_Color_MouseClick(object sender, EventArgs e)
@@ -301,9 +327,33 @@ namespace MidtermProject
 
         private void bt_FloodFill_MouseClick(object sender, EventArgs e)
         {
-            fill = 1;
+            fillClick = 1;
             fillType = 1;
             draw = 0;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem == "1.5")
+                size = 1.5f;
+            else if (comboBox1.SelectedItem == "2.0")
+                size = 2.0f;
+            else if (comboBox1.SelectedItem == "2.5")
+                size = 2.5f;
+            else if (comboBox1.SelectedItem == "3.0")
+                size = 3.0f;
+            else if (comboBox1.SelectedItem == "3.5")
+                size = 3.5f;
+            else if (comboBox1.SelectedItem == "4.0")
+                size = 4.0f;
+            else if (comboBox1.SelectedItem == "4.5")
+                size = 4.5f;
+            else if (comboBox1.SelectedItem == "5.0")
+                size = 5.0f;
+            else if (comboBox1.SelectedItem == "5.5")
+                size = 5.5f;
+            else if (comboBox1.SelectedItem == "6.0")
+                size = 6.0f;
         }
     }
 }

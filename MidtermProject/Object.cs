@@ -15,6 +15,9 @@ namespace MidtermProject
         // neu hinh la hinh deu thi IsEquilateral = true va nguoc lai
         public bool IsEquilateral = false;
         public Color color;
+        public Point pSeed;
+        public bool fill = false;
+        public float lineWidth = 1.0f;
         // dem so dinh
         public virtual int pointCount() { return 0; }
 
@@ -35,7 +38,14 @@ namespace MidtermProject
         { }
 
         public virtual void FillColor(OpenGL gl, int type)
-        { }
+        {
+            if(type==1)
+            {
+                Fill f = new FloodFill();
+                f.newColor = color;
+                f.ApplyFill(gl, pSeed);
+            }
+        }
 
   
 
@@ -64,13 +74,13 @@ namespace MidtermProject
            
             gl.End();
             gl.Flush();
-
+           
         }
     }
 
     class Triangle : Shape
     {
-        private Point Vertex1, Vertex2, Vertex3, pCenter;
+        private Point Vertex1, Vertex2, Vertex3;
 
         public override int pointCount() { return 3; }
         public override void Update(Point p1, Point p2) // start point, end point
@@ -99,6 +109,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+           
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP); // Chọn chế độ vẽ tam giác
 
@@ -107,8 +118,11 @@ namespace MidtermProject
             gl.Vertex(Vertex3.X, gl.RenderContextProvider.Height - Vertex3.Y);
 
             gl.End();
-            gl.Flush();           
+            
+            gl.Flush();
+           
         }
+        
         //public override void FillColor(OpenGL gl, Color color, int type)
         //{
         //    pCenter = new Point((Vertex1.X + Vertex2.X + Vertex3.X) / 3, (Vertex1.Y + Vertex2.Y + Vertex3.Y) / 3);
@@ -146,6 +160,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl)
 
         {
+           
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP); 
 
@@ -155,6 +170,7 @@ namespace MidtermProject
             gl.Vertex(Vertex4.X, gl.RenderContextProvider.Height - Vertex4.Y);
 
             gl.End();
+        
             gl.Flush();
         }
     }
@@ -221,6 +237,7 @@ namespace MidtermProject
             gl.End();
             gl.Flush();
         }
+        
     }
 
     class Pentagon : Shape
@@ -445,10 +462,10 @@ class Fill
     {
         //Lấy từng thành phần màu
         float[] pixels = new float[4];
-        pixels[0] = newColor.R;
-        pixels[1] = newColor.G;
-        pixels[2] = newColor.B;
-        pixels[3] = newColor.A;
+        pixels[0] = (float)newColor.R;
+        pixels[1] = (float)newColor.G;
+        pixels[2] = (float)newColor.B;
+        pixels[3] = (float)newColor.A;
        // gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0, color.A);
         //gl.PointSize(2.0f);//Size điểm
         //gl.Begin(OpenGL.GL_POINTS);
@@ -510,28 +527,11 @@ class FloodFill : Fill
 
                 //Nếu điểm đó chưa tô thì thêm vào stack
                 if (neighbor_color[0] == oldColor.R && neighbor_color[1] == oldColor.G && neighbor_color[2] == oldColor.B
-                   )
-                {
+                   &&neighbor_color[3]==oldColor.A)
                     s.Push(pNeighbor);
-                }
             }
 
-        }
-        //Byte[] current_color;
-        //getPixel(gl, center, out current_color);
-        //if (current_color[0] == oldColor.R && current_color[1] == oldColor.G && current_color[2] == oldColor.B
-        //       && current_color[3] == oldColor.A)
-        //{
-        //    putPixel(gl, center, newColor);
-        //    Point p1 = new Point(center.X + 1, center.Y);
-        //    Point p2 = new Point(center.X - 1, center.Y);
-        //    Point p3 = new Point(center.X, center.Y + 1);
-        //    Point p4 = new Point(center.X, center.Y - 1);
-        //    FillColor(gl, p1, newColor, oldColor);
-        //    FillColor(gl, p2, newColor, oldColor);
-        //    FillColor(gl, p3, newColor, oldColor);
-        //    FillColor(gl, p4, newColor, oldColor);
-        //}
+        }     
     }
     
 }
