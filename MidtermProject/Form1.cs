@@ -131,11 +131,7 @@ namespace MidtermProject
             DrawShape(gl, t);
 
             //Tô loang
-            if (fillType == 1 && !pFill.IsEmpty)
-            {
-                f = new FloodFill();
-                f.ApplyFill(gl, pFill, colorUserColor);
-            }
+           
 
 
         }
@@ -146,9 +142,14 @@ namespace MidtermProject
             foreach(Shape s in listShape)
             {
                 s.Draw(gl);
-                //if (fillType == 1  && !pFill.IsEmpty)
-                //    s.FillColor(gl, colorUserColor, 1);
+               
             }
+            if (fillType == 1 && !pFill.IsEmpty)
+            {
+                f = new FloodFill();
+                f.ApplyFill(gl, pFill, colorUserColor);
+            }
+
         }
 
         // ve hinh, input bien control, hinh can ve
@@ -186,8 +187,7 @@ namespace MidtermProject
             }
             
             drawAll(gl);
-         
-            
+           
         }
 
         private void openGLControl_MouseDown(object sender, MouseEventArgs e)
@@ -300,6 +300,7 @@ namespace MidtermProject
         {
             fill = 1;
             fillType = 1;
+            draw = 0;
         }
     }
 }
