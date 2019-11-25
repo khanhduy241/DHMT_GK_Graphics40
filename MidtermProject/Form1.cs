@@ -93,7 +93,7 @@ namespace MidtermProject
             // Clear the color and depth buffer
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
           
-            gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
+           // gl.Color(colorUserColor.R / 255.0, colorUserColor.G / 255.0, colorUserColor.B / 255.0);
             gl.LineWidth(2.0f);
 
             if (shape == 0) {
@@ -127,11 +127,12 @@ namespace MidtermProject
                 t.IsEquilateral = true;
             else
                 t.IsEquilateral = false;
-          
-            DrawShape(gl, t);
 
+            t.color = colorUserColor;
+            DrawShape(gl, t);
+            t.color = colorUserColor;
             //Tô loang
-           
+
 
 
         }
@@ -141,15 +142,17 @@ namespace MidtermProject
         {
             foreach(Shape s in listShape)
             {
+              
                 s.Draw(gl);
                
             }
+
             if (fillType == 1 && !pFill.IsEmpty)
             {
                 f = new FloodFill();
-                f.ApplyFill(gl, pFill, colorUserColor);
+                f.newColor = colorUserColor;
+                f.ApplyFill(gl, pFill);
             }
-
         }
 
         // ve hinh, input bien control, hinh can ve

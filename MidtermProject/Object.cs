@@ -14,7 +14,7 @@ namespace MidtermProject
     {
         // neu hinh la hinh deu thi IsEquilateral = true va nguoc lai
         public bool IsEquilateral = false;
-
+        public Color color;
         // dem so dinh
         public virtual int pointCount() { return 0; }
 
@@ -34,8 +34,10 @@ namespace MidtermProject
         public virtual void DrawByLine(OpenGL gl)
         { }
 
-        public virtual void FillColor(OpenGL gl, Color color, int type)
+        public virtual void FillColor(OpenGL gl, int type)
         { }
+
+  
 
     }
 
@@ -53,6 +55,8 @@ namespace MidtermProject
         }
 
         public override void Draw(OpenGL gl) {
+
+            gl.Color(color.R/255.0, color.G/255.0, color.B/255.0);
             gl.Begin(OpenGL.GL_LINES); // Chọn chế độ vẽ line
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -95,6 +99,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP); // Chọn chế độ vẽ tam giác
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -139,7 +144,9 @@ namespace MidtermProject
         }
 
         public override void Draw(OpenGL gl)
+
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP); 
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -171,6 +178,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < 360; i++)
@@ -200,6 +208,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < 360; i ++)
@@ -278,6 +287,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -362,6 +372,7 @@ namespace MidtermProject
 
         public override void Draw(OpenGL gl)
         {
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -412,6 +423,7 @@ namespace MidtermProject
         {
             if (px == null) return;
 
+            gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < px.Count(); i++)
@@ -426,16 +438,17 @@ namespace MidtermProject
 
 class Fill
 {
-    public virtual void FillColor(OpenGL gl, Point p, Color oldColor, Color newColor) { }
-    public virtual void ApplyFill(OpenGL gl, Point p, Color newColor) { }
-    public void putPixel(OpenGL gl, Point p, Color color)
+    public Color newColor;
+    public virtual void FillColor(OpenGL gl, Point p, Color oldColor) { }
+    public virtual void ApplyFill(OpenGL gl, Point p) { }
+    public void putPixel(OpenGL gl, Point p)
     {
         //Lấy từng thành phần màu
         float[] pixels = new float[4];
-        pixels[0] = color.R;
-        pixels[1] = color.G;
-        pixels[2] = color.B;
-        pixels[3] = color.A;
+        pixels[0] = newColor.R;
+        pixels[1] = newColor.G;
+        pixels[2] = newColor.B;
+        pixels[3] = newColor.A;
        // gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0, color.A);
         //gl.PointSize(2.0f);//Size điểm
         //gl.Begin(OpenGL.GL_POINTS);
@@ -454,7 +467,7 @@ class Fill
 
 class FloodFill : Fill
 {
-    public override void ApplyFill(OpenGL gl, Point pFill, Color newColor)
+    public override void ApplyFill(OpenGL gl, Point pFill)
     {
 
         Byte[] pixel = new Byte[4];
@@ -463,9 +476,9 @@ class FloodFill : Fill
         Color oldColor = new Color();
         oldColor = Color.FromArgb(pixel[3], pixel[0], pixel[1], pixel[2]);
         //Tô loang
-        FillColor(gl, pFill, oldColor, newColor);
+        FillColor(gl, pFill, oldColor);
     }
-    public override void FillColor(OpenGL gl, Point center, Color oldColor, Color newColor)
+    public override void FillColor(OpenGL gl, Point center, Color oldColor)
     {
         //Tránh lặp vô hạn khi màu cũ giống màu mới
         if (newColor == oldColor) return;
@@ -484,7 +497,7 @@ class FloodFill : Fill
             //Lấy điểm từ stack
             Point p = s.Pop();
             //Tô màu cho điểm đó
-            putPixel(gl, p, newColor);
+            putPixel(gl, p);
             //Truy xuất lân cận 4 của điểm hiện hành
             for (int i = 0; i < 4; i++)
             {
