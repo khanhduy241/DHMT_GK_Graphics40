@@ -141,28 +141,20 @@ namespace MidtermProject
             else
                 t.IsEquilateral = false;
 
-            //Kiểm tra xem có tô màu không
-
-
-            //  t.color = colorUserColor;
           
             DrawShape(gl, t);
 
+            f.newColor = colorUserColor;
+
             if (fillClick == 1 && !pFill.IsEmpty)
 
-            {
-                t.fill = true;
-                t.pSeed = pFill;
+            {   
+                //Tô loang
+                f = new FloodFill();
+                f.seed = pFill;
+                f.FillColor(gl);
+                listFill.Add(f);
             }
-
-            //Tô loang
-            if (t.fill == true)
-            {
-                t.FillColor(gl, 1);
-            }
-
-
-
         }
 
         // ve tat ca hinh trong list
@@ -171,9 +163,10 @@ namespace MidtermProject
             foreach (Shape s in listShape)
             {
                 s.Draw(gl);
-                //if (s.fill == true)
-                //    s.FillColor(gl, 1);
-               
+            }
+            foreach (Fill fi in listFill)
+            {
+                fi.FillColor(gl);
             }
         }
 

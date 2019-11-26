@@ -18,6 +18,7 @@ namespace MidtermProject
         public Point pSeed;
         public bool fill = false;
         public float lineWidth = 1.0f;
+        public Fill fi;
         // dem so dinh
         public virtual int pointCount() { return 0; }
 
@@ -37,17 +38,17 @@ namespace MidtermProject
         public virtual void DrawByLine(OpenGL gl)
         { }
 
-        public virtual void FillColor(OpenGL gl, int type)
-        {
-            if(type==1)
-            {
-                Fill f = new FloodFill();
-                f.newColor = color;
-                f.ApplyFill(gl, pSeed);
-            }
-        }
+        //public virtual void FillColor(OpenGL gl, int type)
+        //{
+        //    if (type == 1)
+        //    {
+        //        Fill f = new FloodFill();
+        //        f.newColor = color;
+        //        f.ApplyFill(gl, pSeed);
+        //    }
+        //}
 
-  
+
 
     }
 
@@ -67,6 +68,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl) {
 
             gl.Color(color.R/255.0, color.G/255.0, color.B/255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINES); // Chọn chế độ vẽ line
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -111,6 +113,7 @@ namespace MidtermProject
         {
            
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP); // Chọn chế độ vẽ tam giác
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -162,6 +165,7 @@ namespace MidtermProject
         {
            
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP); 
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -195,6 +199,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < 360; i++)
@@ -225,6 +230,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < 360; i ++)
@@ -305,6 +311,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -390,6 +397,7 @@ namespace MidtermProject
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
@@ -441,6 +449,7 @@ namespace MidtermProject
             if (px == null) return;
 
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            gl.LineWidth(this.lineWidth);
             gl.Begin(OpenGL.GL_LINE_LOOP);
 
             for (int i = 0; i < px.Count(); i++)
@@ -453,85 +462,3 @@ namespace MidtermProject
     }
 }
 
-class Fill
-{
-    public Color newColor;
-    public virtual void FillColor(OpenGL gl, Point p, Color oldColor) { }
-    public virtual void ApplyFill(OpenGL gl, Point p) { }
-    public void putPixel(OpenGL gl, Point p)
-    {
-        //Lấy từng thành phần màu
-        float[] pixels = new float[4];
-        pixels[0] = (float)newColor.R;
-        pixels[1] = (float)newColor.G;
-        pixels[2] = (float)newColor.B;
-        pixels[3] = (float)newColor.A;
-       // gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0, color.A);
-        //gl.PointSize(2.0f);//Size điểm
-        //gl.Begin(OpenGL.GL_POINTS);
-        //gl.Vertex(p.X, gl.RenderContextProvider.Height - p.Y);
-        //gl.End();
-        gl.RasterPos(p.X, gl.RenderContextProvider.Height - p.Y);
-        gl.DrawPixels(1, 1, OpenGL.GL_RGBA, pixels);
-        gl.Flush();
-    }
-    public void getPixel(OpenGL gl, Point p, out Byte[] color)
-    {
-        color = new Byte[4 * 1 * 1]; // Components * width * height (RGBA)
-        gl.ReadPixels(p.X, gl.RenderContextProvider.Height - p.Y, 1, 1, OpenGL.GL_RGBA, OpenGL.GL_UNSIGNED_BYTE, color);
-    }
-}
-
-class FloodFill : Fill
-{
-    public override void ApplyFill(OpenGL gl, Point pFill)
-    {
-
-        Byte[] pixel = new Byte[4];
-        //Lấy điểm hạt giống
-        getPixel(gl, pFill, out pixel);
-        Color oldColor = new Color();
-        oldColor = Color.FromArgb(pixel[3], pixel[0], pixel[1], pixel[2]);
-        //Tô loang
-        FillColor(gl, pFill, oldColor);
-    }
-    public override void FillColor(OpenGL gl, Point center, Color oldColor)
-    {
-        //Tránh lặp vô hạn khi màu cũ giống màu mới
-        if (newColor == oldColor) return;
-
-        //Mảng index để truy cập các lân cận 4
-        int[] dx = new int[] { 0, 1, 0, -1 };
-        int[] dy = new int[] { -1, 0, 1, 0 };
-
-        //Tạo stack và push điểm khởi đầu vào stack
-        Stack<Point> s = new Stack<Point>();
-        s.Push(center);
-
-        //Lặp đến khi stack rỗng
-        while (s.Count != 0)
-        {
-            //Lấy điểm từ stack
-            Point p = s.Pop();
-            //Tô màu cho điểm đó
-            putPixel(gl, p);
-            //Truy xuất lân cận 4 của điểm hiện hành
-            for (int i = 0; i < 4; i++)
-            {
-                //Lấy điểm lân cận
-                Point pNeighbor = new Point(p.X + dx[i], p.Y + dy[i]);
-
-                //Lấy giá trị pixel của điểm đó
-                Byte[] neighbor_color;
-                getPixel(gl, pNeighbor, out neighbor_color);
-
-                //Nếu điểm đó chưa tô thì thêm vào stack
-                if (neighbor_color[0] == oldColor.R && neighbor_color[1] == oldColor.G && neighbor_color[2] == oldColor.B
-                   &&neighbor_color[3]==oldColor.A)
-                    s.Push(pNeighbor);
-            }
-
-        }     
-    }
-    
-}
