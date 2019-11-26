@@ -141,20 +141,22 @@ namespace MidtermProject
             else
                 t.IsEquilateral = false;
 
-          
-            DrawShape(gl, t);
-
-            f.newColor = colorUserColor;
+            t.lineWidth = size;
 
             if (fillClick == 1 && !pFill.IsEmpty)
 
-            {   
+            {
                 //Tô loang
                 f = new FloodFill();
                 f.seed = pFill;
-                f.FillColor(gl);
-                listFill.Add(f);
+               
             }
+
+            DrawShape(gl, t);
+
+            f.newColor = colorUserColor;
+            f.FillColor(gl);
+
         }
 
         // ve tat ca hinh trong list

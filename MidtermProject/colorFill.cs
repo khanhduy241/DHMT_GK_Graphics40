@@ -19,11 +19,11 @@ namespace MidtermProject
         public void putPixel(OpenGL gl, Point p)
         {
             //Lấy từng thành phần màu
-            float[] pixels = new float[4];
-            pixels[0] = (float)newColor.R;
-            pixels[1] = (float)newColor.G;
-            pixels[2] = (float)newColor.B;
-            pixels[3] = (float)newColor.A;
+            Byte[] pixels = new Byte[4];
+            pixels[0] = newColor.R;
+            pixels[1] = newColor.G;
+            pixels[2] = newColor.B;
+            pixels[3] = newColor.A;
             // gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0, color.A);
             //gl.PointSize(2.0f);//Size điểm
             //gl.Begin(OpenGL.GL_POINTS);
