@@ -35,6 +35,8 @@ namespace MidtermProject
         int pick = -1;
         int shape = 0;
 
+        int btpress = 0;
+
         /*Kiểu tô
             1: Tô loang
             2: Tô scanline
@@ -164,6 +166,8 @@ namespace MidtermProject
         {
             foreach (Shape s in listShape)
             {
+                if (btpress == 0 && s == listShape[listShape.Count() - 1])
+                    s.ctrlPDraw(gl);
                 s.Draw(gl);
             }
             foreach (Fill fi in listFill)
@@ -201,16 +205,18 @@ namespace MidtermProject
                 else if (draw == 0)
                 {
                     t.Update(pStart, pEnd);
-                    t.Draw(gl);           
+                    t.getCtrlP();
+                    t.Draw(gl);
+                    t.ctrlPDraw(gl);
                     //if(fillClick==1&&!pFill.IsEmpty)
                     //{
                     //    t.fill = true;
                     //    t.pSeed = pFill;
                     //}
                     listShape.Add(t);
-                
+                    draw = -1;
                 }
-            }           
+            }
             drawAll(gl);           
         }
 
@@ -218,7 +224,8 @@ namespace MidtermProject
         {
             pStart = e.Location;
             pEnd = pStart;
-            draw = 1;
+            if(btpress == 1)
+                draw = 1;
             if (fillClick == 1)
             {
                 pFill = e.Location;
@@ -227,9 +234,10 @@ namespace MidtermProject
 
         private void openGLControl_MouseUp(object sender, MouseEventArgs e)
         {
-            draw = 0;
+            if (btpress == 1)
+                draw = 0;
             pEnd = e.Location;
-            
+            btpress = 0;
         }
 
         private void openGLControl_MouseMove(object sender, MouseEventArgs e)
@@ -263,6 +271,7 @@ namespace MidtermProject
             shape = 1;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_triangle_MouseClick(object sender, MouseEventArgs e)
@@ -270,6 +279,7 @@ namespace MidtermProject
             shape = 2;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_circle_MouseClick(object sender, MouseEventArgs e)
@@ -277,6 +287,7 @@ namespace MidtermProject
             shape = 3;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_ellipse_MouseClick(object sender, MouseEventArgs e)
@@ -284,6 +295,7 @@ namespace MidtermProject
             shape = 4;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_rectangle_MouseClick(object sender, MouseEventArgs e)
@@ -291,6 +303,7 @@ namespace MidtermProject
             shape = 5;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_pentagon_MouseClick(object sender, MouseEventArgs e)
@@ -298,6 +311,7 @@ namespace MidtermProject
             shape = 6;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_hexagon_MouseClick(object sender, MouseEventArgs e)
@@ -305,6 +319,7 @@ namespace MidtermProject
             shape = 7;
             draw = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_polygon_MouseClick(object sender, MouseEventArgs e)
@@ -312,6 +327,7 @@ namespace MidtermProject
             shape = 8;
             pick = -1;
             fillClick = 0;
+            btpress = 1;
         }
 
         private void bt_Color_MouseClick(object sender, EventArgs e)

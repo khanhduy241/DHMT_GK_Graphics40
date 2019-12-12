@@ -12,6 +12,8 @@ namespace MidtermProject
     // Lop hinh hoc
     class Shape
     {
+        public List<Point> ctrlPoint = null;
+        public int ctrlPcount;
         // neu hinh la hinh deu thi IsEquilateral = true va nguoc lai
         public bool IsEquilateral = false;
         public Color color;
@@ -29,6 +31,31 @@ namespace MidtermProject
         // cap nhat toa do dinh tu diem dau va diem cuoi
         public virtual void Update(Point p1, Point p2)
         { }
+
+        // lay control point                                                                                     
+        public virtual void getCtrlP()
+        { }
+
+        // ve control point
+        public virtual void ctrlPDraw(OpenGL gl)
+        {
+            if (ctrlPoint != null)
+            {
+                for (int i = 0; i < ctrlPcount; i++)
+                {
+                    Shape t = new Rectangle();
+                    t.color = Color.Blue;
+                    t.lineWidth = 3;
+                    Point p1 = new Point(ctrlPoint[i].X - 2, ctrlPoint[i].Y - 2);
+                    Point p2 = new Point(ctrlPoint[i].X + 2, ctrlPoint[i].Y + 2);
+                    t.Update(p1, p2);
+                    t.Draw(gl);
+                }
+            }
+
+            gl.End();
+            gl.Flush();
+        }
 
         // ve hinh
         public virtual void Draw(OpenGL gl)
@@ -65,6 +92,15 @@ namespace MidtermProject
             Vertex2 = p2;
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(Vertex1);
+            ctrlPoint.Add(Vertex2);
+            ctrlPcount = 2;
+
+        }
+
         public override void Draw(OpenGL gl) {
 
             gl.Color(color.R/255.0, color.G/255.0, color.B/255.0);
@@ -73,10 +109,9 @@ namespace MidtermProject
 
             gl.Vertex(Vertex1.X, gl.RenderContextProvider.Height - Vertex1.Y);
             gl.Vertex(Vertex2.X, gl.RenderContextProvider.Height - Vertex2.Y);
-           
+
             gl.End();
             gl.Flush();
-           
         }
     }
 
@@ -109,6 +144,20 @@ namespace MidtermProject
             }
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(new Point(Vertex2.X, Vertex1.Y));
+            ctrlPoint.Add(Vertex1);
+            ctrlPoint.Add(new Point(Vertex3.X, Vertex1.Y));
+            ctrlPoint.Add(new Point(Vertex3.X, (Vertex1.Y + Vertex3.Y) / 2));
+            ctrlPoint.Add(new Point(Vertex3.X, Vertex3.Y));
+            ctrlPoint.Add(new Point(Vertex1.X, Vertex3.Y));
+            ctrlPoint.Add(Vertex2);
+            ctrlPoint.Add(new Point(Vertex2.X, (Vertex1.Y + Vertex3.Y) / 2));
+            ctrlPcount = 8;
+
+        }
         public override void Draw(OpenGL gl)
         {
            
@@ -160,6 +209,21 @@ namespace MidtermProject
             }
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(Vertex1);
+            ctrlPoint.Add(new Point((Vertex1.X + Vertex2.X) / 2, Vertex1.Y));
+            ctrlPoint.Add(Vertex2);
+            ctrlPoint.Add(new Point(Vertex2.X, (Vertex2.Y + Vertex3.Y) / 2));
+            ctrlPoint.Add(Vertex3);
+            ctrlPoint.Add(new Point((Vertex3.X + Vertex4.X) / 2, Vertex3.Y));
+            ctrlPoint.Add(Vertex4);
+            ctrlPoint.Add(new Point(Vertex1.X, (Vertex1.Y + Vertex4.Y) / 2));
+            ctrlPcount = 8;
+
+        }
+
         public override void Draw(OpenGL gl)
 
         {
@@ -196,6 +260,20 @@ namespace MidtermProject
             centerY = (p2.Y + p1.Y) / 2;
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(new Point((int)(centerX - r), (int)(centerY - r)));
+            ctrlPoint.Add(new Point((int)(centerX), (int)(centerY - r)));
+            ctrlPoint.Add(new Point((int)(centerX + r), (int)(centerY - r)));
+            ctrlPoint.Add(new Point((int)(centerX + r), (int)(centerY)));
+            ctrlPoint.Add(new Point((int)(centerX + r), (int)(centerY + r)));
+            ctrlPoint.Add(new Point((int)(centerX), (int)(centerY + r)));
+            ctrlPoint.Add(new Point((int)(centerX - r), (int)(centerY + r)));
+            ctrlPoint.Add(new Point((int)(centerX - r), (int)(centerY)));
+            ctrlPcount = 8;
+
+        }
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
@@ -227,6 +305,20 @@ namespace MidtermProject
 
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(new Point((int)(centerX - rx), (int)(centerY - ry)));
+            ctrlPoint.Add(new Point((int)(centerX), (int)(centerY - ry)));
+            ctrlPoint.Add(new Point((int)(centerX + rx), (int)(centerY - ry)));
+            ctrlPoint.Add(new Point((int)(centerX + rx), (int)(centerY)));
+            ctrlPoint.Add(new Point((int)(centerX + rx), (int)(centerY + ry)));
+            ctrlPoint.Add(new Point((int)(centerX), (int)(centerY + ry)));
+            ctrlPoint.Add(new Point((int)(centerX - rx), (int)(centerY + ry)));
+            ctrlPoint.Add(new Point((int)(centerX - rx), (int)(centerY)));
+            ctrlPcount = 8;
+
+        }
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
@@ -308,6 +400,20 @@ namespace MidtermProject
             }
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(new Point(Vertex5.X,Vertex1.Y));
+            ctrlPoint.Add(Vertex1);
+            ctrlPoint.Add(new Point(Vertex2.X, Vertex1.Y));
+            ctrlPoint.Add(new Point(Vertex2.X, (Vertex1.Y + Vertex3.Y) / 2));
+            ctrlPoint.Add(new Point(Vertex2.X, Vertex3.Y));
+            ctrlPoint.Add(new Point(Vertex1.X, Vertex3.Y));
+            ctrlPoint.Add(new Point(Vertex5.X, Vertex4.Y));
+            ctrlPoint.Add(new Point(Vertex5.X, (Vertex1.Y + Vertex4.Y) / 2));
+            ctrlPcount = 8;
+
+        }
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
@@ -394,6 +500,20 @@ namespace MidtermProject
             }
         }
 
+        public override void getCtrlP()
+        {
+            ctrlPoint = new List<Point>();
+            ctrlPoint.Add(new Point(Vertex6.X, Vertex1.Y));
+            ctrlPoint.Add(Vertex1);
+            ctrlPoint.Add(new Point(Vertex2.X, Vertex1.Y));
+            ctrlPoint.Add(new Point(Vertex2.X, (Vertex1.Y + Vertex4.Y) / 2));
+            ctrlPoint.Add(new Point(Vertex2.X, Vertex4.Y));
+            ctrlPoint.Add(Vertex4);
+            ctrlPoint.Add(new Point(Vertex5.X, Vertex4.Y));
+            ctrlPoint.Add(new Point(Vertex5.X, (Vertex1.Y + Vertex4.Y) / 2));
+            ctrlPcount = 8;
+
+        }
         public override void Draw(OpenGL gl)
         {
             gl.Color(color.R / 255.0, color.G / 255.0, color.B / 255.0);
